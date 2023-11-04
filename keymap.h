@@ -9,4 +9,4 @@
 
     Mapped for US standard keyboard layout.
 */
-void log_keystroke(FILE * file, struct input_event event);
+void log_keystroke_humanformat(FILE * file, struct input_event event);

