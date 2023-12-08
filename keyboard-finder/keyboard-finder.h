@@ -5,4 +5,4 @@
  *
  * The returned path string needs to be freed by the user.
  */
-char * find_keyboard_device(void);
+char * find_keyboard_device(int verbose);

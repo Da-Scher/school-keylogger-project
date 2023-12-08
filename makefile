@@ -1,14 +1,14 @@
-naktm: naktm.o keymap.o keyboard-finder.o
-	gcc -o naktm naktm.o keymap.o keyboard-finder.o
+naktm: build/naktm.o build/keymap.o build/keyboard-finder.o
+	gcc -o naktm build/naktm.o build/keymap.o build/keyboard-finder.o
 
-naktm.o: naktm.c
-	gcc -c naktm.c
+build/naktm.o: naktm.c
+	gcc -c naktm.c -o build/naktm.o
 
-keymap.o: keymap.c
-	gcc -c keymap.c
+build/keymap.o: keymap/keymap.c
+	gcc -c keymap/keymap.c -o build/keymap.o
 
-keyboard-finder.o: keyboard-finder.c
-	gcc -c keyboard-finder.c
+build/keyboard-finder.o: keyboard-finder/keyboard-finder.c
+	gcc -c keyboard-finder/keyboard-finder.c -o build/keyboard-finder.o
 
 clean:
-	rm -f naktm naktm.o keymap.o keyboard-finder.o
+	rm -rf build/* naktm

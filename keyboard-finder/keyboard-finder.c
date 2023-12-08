@@ -3,15 +3,13 @@
 #include <string.h>
 #include <unistd.h>
 
-#define VERBOSE 1
-
 /* Looks at each /dev/input/deviceX on the system, and if 
  * one seems to be a keyboard, returns the path to it.
  * If none appear to be keyboards, NULL is returned.
  *
  * The returned path string needs to be freed by the user.
  */
-char * find_keyboard_device(void)
+char * find_keyboard_device(int verbose)
 {
 	FILE * fp;
 	int numEventDevices;
@@ -30,7 +28,7 @@ char * find_keyboard_device(void)
 		sscanf(buffer, "%d", &numEventDevices);
 	}
 	fclose(fp);
-	if (VERBOSE)
+	if (verbose)
 		printf("Detected %d event devices on the system.\n", numEventDevices);
 
 	// step 2: check which are keyboard devices.
@@ -58,11 +56,11 @@ char * find_keyboard_device(void)
 		}
 	}
 	if (strcmp(keyboard_dev, "") == 0) {
-		if (VERBOSE) printf("Could not find keyboard device.\n");
+		if (verbose) printf("Could not find keyboard device.\n");
 		return NULL;
 	}
 	else {
-		if (VERBOSE) printf("%s seems to be the keyboard device.\n", keyboard_dev);
+		if (verbose) printf("%s seems to be the keyboard device.\n", keyboard_dev);
 		return keyboard_dev;
 	}
 }
